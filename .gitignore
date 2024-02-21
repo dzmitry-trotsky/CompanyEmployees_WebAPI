@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#custom
+internal_logs/
+[Mm]igrations
+/CompanyEmployees/appsettings.json
+/CompanyEmployees/appsettings.*.json
+
 # User-specific files
 *.rsuser
 *.suo
