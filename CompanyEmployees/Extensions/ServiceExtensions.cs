@@ -14,6 +14,7 @@ namespace CompanyEmployees.Extensions
             services.AddDbContext<RepositoryContext>(opts =>
             opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
         }
+
         public static void ConfigureCors(this IServiceCollection services)
         {
             services.AddCors(options =>
@@ -43,6 +44,7 @@ namespace CompanyEmployees.Extensions
         {
             services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
+
         public static void ConfigureServiceManager(this IServiceCollection services)
         {
             services.AddScoped<IServiceManager, ServiceManager>();
