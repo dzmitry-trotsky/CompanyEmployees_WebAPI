@@ -21,8 +21,4 @@
 		<ProjectReference Include="..\CompanyEmployees.Presentation\CompanyEmployees.Presentation.csproj" />
 	</ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Новая папка\" />
-    </ItemGroup>
-
 </Project>
