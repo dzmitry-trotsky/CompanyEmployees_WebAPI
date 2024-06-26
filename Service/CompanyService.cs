@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    internal sealed class CompanyService: ICompanyService
+    internal sealed class CompanyService : ICompanyService
     {
         private readonly IRepositoryManager _repository;
         private readonly ILoggerManager _logger;
@@ -29,6 +29,15 @@ namespace Service
             var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
 
             return companiesDto;
+        }
+
+        public CompanyDto GetCompany(Guid id, bool trackChanges)
+        {
+            var company = _repository.Company.GetCompany(id, trackChanges);
+
+            var companyDto = _mapper.Map<CompanyDto>(company);
+
+            return companyDto;
         }
     }
 }

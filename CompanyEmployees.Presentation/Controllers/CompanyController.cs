@@ -10,11 +10,11 @@ namespace CompanyEmployees.Presentation.Controllers
 {
     [Route("api/companies")]
     [ApiController]
-    public class CompaniesController: ControllerBase
+    public class CompanyController: ControllerBase
     {
         private readonly IServiceManager _service;
 
-        public CompaniesController(IServiceManager service)
+        public CompanyController(IServiceManager service)
         {
             _service = service;
         }
@@ -23,7 +23,16 @@ namespace CompanyEmployees.Presentation.Controllers
         public IActionResult GetCompanies()
         {
             var companies = _service.CompanyService.GetAllCompanies(trackChanges: false);
+
             return Ok(companies);
+        }
+
+        [HttpGet("{id:guid}")]
+        public IActionResult GetCompany(Guid id)
+        {
+            var company = _service.CompanyService.GetCompany(id, false);
+
+            return Ok(company);
         }
     }
 }
