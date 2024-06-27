@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using CompanyEmployees.Formatters;
+using Contracts;
 using LoggerService;
 using Microsoft.EntityFrameworkCore;
 using Repository;
@@ -48,6 +49,11 @@ namespace CompanyEmployees.Extensions
         public static void ConfigureServiceManager(this IServiceCollection services)
         {
             services.AddScoped<IServiceManager, ServiceManager>();
+        }
+
+        public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder)
+        {
+            return builder.AddMvcOptions( config => config.OutputFormatters.Add(new CsvOutputFormatter()));
         }
     }
 }
