@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace Service.Contracts
 {
     public interface IEmployeeService
     {
+        IEnumerable<EmployeeDto> GetAll(Guid companyId, bool trackChanges);
 
+        EmployeeDto GetEmployee(Guid companyId, Guid id, bool trackChanges);
     }
 }
