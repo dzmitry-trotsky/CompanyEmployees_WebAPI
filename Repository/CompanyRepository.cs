@@ -29,5 +29,10 @@ namespace Repository
 
             return company;
         }
+
+        public void CreateCompany(Company company)
+        {
+            Create(company);
+        }
     }
 }
