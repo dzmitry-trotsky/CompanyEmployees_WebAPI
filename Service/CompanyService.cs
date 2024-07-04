@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities.Exceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service
 {
@@ -52,8 +48,40 @@ namespace Service
             var companyToReturn = _mapper.Map<CompanyDto>(companyEntity);
 
             return companyToReturn;
-
         }
 
+        public IEnumerable<CompanyDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+        {
+            if(ids is null)
+                throw new IdParametersBadRequestException();
+
+            var companyEnities = _repository.Company.GetByIds(ids, trackChanges);
+
+            if(ids.Count() != companyEnities.Count())
+                throw new CollectionByIdsBadRequestException();
+
+            var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEnities);
+
+            return companiesToReturn;
+        }
+
+        public (IEnumerable<CompanyDto> companies, string ids) CreateCompanyCollection(IEnumerable<CompanyForCreationDto> companyCollection)
+        {
+            if (companyCollection is null) 
+                throw new CompanyCollectionBadRequestException();
+
+            var companyEnities = _mapper.Map<IEnumerable<Company>>(companyCollection);
+
+            foreach (var company in companyEnities)
+                _repository.Company.CreateCompany(company);
+
+            _repository.Save();
+
+            var companyCollectionToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEnities);
+            var ids = string.Join(',', companyCollectionToReturn.Select(c => c.Id));
+
+            return (companyCollectionToReturn, ids);
+
+        }
     }
 }
