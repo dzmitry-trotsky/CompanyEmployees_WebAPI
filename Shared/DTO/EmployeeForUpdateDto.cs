@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace Shared.DTO
 {
-    internal class EmployeeForUpdateDto
-    {
-    }
+    public record EmployeeForUpdateDto(string Name, int Age, string Position);
 }
