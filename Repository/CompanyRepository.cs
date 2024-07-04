@@ -39,5 +39,10 @@ namespace Repository
         {
             return GetByCondition(c => companyIds.Contains(c.Id), trackChanges).ToList();
         }
+
+        public void DeleteCompany(Company company)
+        {
+            Delete(company);
+        }
     }
 }
