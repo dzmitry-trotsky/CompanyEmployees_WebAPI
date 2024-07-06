@@ -1,4 +1,5 @@
-﻿using Shared.DTO;
+﻿using Entities.Models;
+using Shared.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,10 @@ namespace Service.Contracts
 
         void UpdateEmployeeForCompany(Guid companyId, Guid id, EmployeeForUpdateDto employeeForUpdate, 
                                          bool compTrackChanges, bool empTrackChanges);
+
+        (EmployeeForUpdateDto employeePatch, Employee employeeEntity) GetEmployeeForPatch
+                    (Guid companuId, Guid id, bool compTrackChanges, bool empTrackChanges);
+
+        void SaveChangesForPatch(EmployeeForUpdateDto employeeToPatch, Employee employeeEntity);
     }
 }
