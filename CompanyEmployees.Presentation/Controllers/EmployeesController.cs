@@ -65,6 +65,9 @@ namespace CompanyEmployees.Presentation.Controllers
             if (employee is null)
                 return BadRequest("EmployeeForUpdateDto object is null");
 
+            if (ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
             _service.EmployeeService.UpdateEmployeeForCompany(companyId, id, employee, false, true);
 
             return NoContent();
@@ -80,7 +83,12 @@ namespace CompanyEmployees.Presentation.Controllers
 
             var result = _service.EmployeeService.GetEmployeeForPatch(companyId, id, false, true);
 
-            patchDoc.ApplyTo(result.employeePatch);
+            patchDoc.ApplyTo(result.employeePatch, ModelState);
+
+            TryValidateModel(result.employeePatch);
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
 
             _service.EmployeeService.SaveChangesForPatch(result.employeePatch, result.employeeEntity);
 

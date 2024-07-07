@@ -65,7 +65,10 @@ namespace CompanyEmployees.Presentation.Controllers
         public IActionResult CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto> companyCollection) 
         {
             var result =_service.CompanyService.CreateCompanyCollection(companyCollection);
-            
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
             return CreatedAtRoute("CompanyCollection", new { result.ids }, result.companies);
         }
 
@@ -82,6 +85,9 @@ namespace CompanyEmployees.Presentation.Controllers
         {
             if (company is null)
                 return BadRequest("CompanyForUpdateDto object is null");
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
 
             _service.CompanyService.UpdateCompany(id, company, true);
 
