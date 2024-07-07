@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities.Exceptions;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,14 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Company> GetAllCompanies(bool trackChanges)
+        public async Task<IEnumerable<Company>> GetAllCompaniesAsync(bool trackChanges)
         {
-            return GetAll(trackChanges).OrderBy(_ => _.Name).ToList();
+            return await GetAll(trackChanges).OrderBy(_ => _.Name).ToListAsync();
         }
 
-        public Company GetCompany(Guid companyId, bool trackChanges)
+        public async Task<Company> GetCompanyAsync(Guid companyId, bool trackChanges)
         {
-            var company = GetByCondition(c => c.Id.Equals(companyId), trackChanges).SingleOrDefault();
+            var company = await GetByCondition(c => c.Id.Equals(companyId), trackChanges).SingleOrDefaultAsync();
             
 
             if (company is null) { throw new CompanyNotFoundException(companyId); }
@@ -35,9 +36,9 @@ namespace Repository
             Create(company);
         }
 
-        public IEnumerable<Company> GetByIds(IEnumerable<Guid> companyIds, bool trackChanges)
+        public async Task<IEnumerable<Company>> GetByIdsAsync(IEnumerable<Guid> companyIds, bool trackChanges)
         {
-            return GetByCondition(c => companyIds.Contains(c.Id), trackChanges).ToList();
+            return await GetByCondition(c => companyIds.Contains(c.Id), trackChanges).ToListAsync();
         }
 
         public void DeleteCompany(Company company)
