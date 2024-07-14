@@ -1,6 +1,5 @@
 ﻿using Entities.Models;
 using Shared.DTO;
-using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace Service.Contracts
 {
     public interface IEmployeeService
     {
-        Task<(IEnumerable<EmployeeDto> employees, MetaData metaData)> GetAllAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges);
+        Task<IEnumerable<EmployeeDto>> GetAllAsync(Guid companyId, bool trackChanges);
 
         Task<EmployeeDto> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges);
 

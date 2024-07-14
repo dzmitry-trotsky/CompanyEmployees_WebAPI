@@ -10,9 +10,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanyEmployees", "Company
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{6E122B91-E4B8-49AB-AD4A-6FBC6B1E471E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3B129712-8F91-4EC6-998C-9C4C8498581E} = {3B129712-8F91-4EC6-998C-9C4C8498581E}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "LoggerService\LoggerService.csproj", "{C9AA98FD-F0EC-494A-9335-F2EE5998E063}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -40,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanyEmployees.Presentation", "CompanyEmployees.Presentation\CompanyEmployees.Presentation.csproj", "{BFF2E4C8-65FB-4AB3-919C-F29A0F1FF08E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{3B129712-8F91-4EC6-998C-9C4C8498581E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{3B129712-8F91-4EC6-998C-9C4C8498581E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
