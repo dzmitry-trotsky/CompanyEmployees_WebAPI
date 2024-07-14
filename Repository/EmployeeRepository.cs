@@ -2,6 +2,7 @@
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,13 @@ namespace Repository
             return employee;
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId, bool trackChanges)
+        public async Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
         {
-            return await GetByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
-                        .OrderBy(e => e.Name).ToListAsync();
+            var employees = await GetByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
+                        .OrderBy(e => e.Name)
+                        .ToListAsync();
+            return PagedList<Employee>.ToPagedList(employees, employeeParameters.PageNumber,
+                                        employeeParameters.PageSize);
         }
 
         public void CreateEmployeeForCompany(Guid companyId, Employee employee)
