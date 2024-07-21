@@ -2,6 +2,7 @@
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,11 @@ namespace Repository
         {
         }
 
-        public async Task<IEnumerable<Company>> GetAllCompaniesAsync(bool trackChanges)
+        public async Task<PagedList<Company>> GetAllCompaniesAsync(CompanyParameters companyParameters, bool trackChanges)
         {
-            return await GetAll(trackChanges).OrderBy(_ => _.Name).ToListAsync();
+            var companies =  await GetAll(trackChanges).OrderBy(_ => _.Name).ToListAsync();
+
+            return PagedList<Company>.ToPagedList(companies, companyParameters.PageNumber, companyParameters.PageSize);
         }
 
         public async Task<Company> GetCompanyAsync(Guid companyId, bool trackChanges)
@@ -36,9 +39,11 @@ namespace Repository
             Create(company);
         }
 
-        public async Task<IEnumerable<Company>> GetByIdsAsync(IEnumerable<Guid> companyIds, bool trackChanges)
+        public async Task<PagedList<Company>> GetByIdsAsync(IEnumerable<Guid> companyIds, CompanyParameters companyParameters, bool trackChanges)
         {
-            return await GetByCondition(c => companyIds.Contains(c.Id), trackChanges).ToListAsync();
+            var companies = await GetByCondition(c => companyIds.Contains(c.Id), trackChanges).ToListAsync();
+
+            return PagedList<Company>.ToPagedList(companies, companyParameters.PageNumber, companyParameters.PageSize);
         }
 
         public void DeleteCompany(Company company)

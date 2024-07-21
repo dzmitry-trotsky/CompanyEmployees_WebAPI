@@ -4,6 +4,7 @@ using Entities.Exceptions;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DTO;
+using Shared.RequestFeatures;
 using System.ComponentModel.Design;
 
 namespace Service
@@ -21,12 +22,12 @@ namespace Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CompanyDto>> GetAllCompaniesAsync(bool trackChanges)
+        public async Task<(IEnumerable<CompanyDto> companies, MetaData metaData)> GetAllCompaniesAsync(CompanyParameters companyParameters, bool trackChanges)
         {
-            var companies = await _repository.Company.GetAllCompaniesAsync(trackChanges);
-            var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
+            var companiesWithMetadata = await _repository.Company.GetAllCompaniesAsync(companyParameters, trackChanges);
+            var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companiesWithMetadata);
 
-            return companiesDto;
+            return (companiesDto, metaData: companiesWithMetadata.MetaData);
         }
 
         public async Task<CompanyDto> GetCompanyAsync(Guid id, bool trackChanges)
@@ -51,19 +52,19 @@ namespace Service
             return companyToReturn;
         }
 
-        public async Task<IEnumerable<CompanyDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<(IEnumerable<CompanyDto> companies, MetaData metaData)> GetByIdsAsync(IEnumerable<Guid> ids, CompanyParameters companyParameters, bool trackChanges)
         {
             if(ids is null)
                 throw new IdParametersBadRequestException();
 
-            var companyEnities = await _repository.Company.GetByIdsAsync(ids, trackChanges);
+            var companyEnitiesWithMetadata = await _repository.Company.GetByIdsAsync(ids, companyParameters, trackChanges);
 
-            if(ids.Count() != companyEnities.Count())
+            if(ids.Count() != companyEnitiesWithMetadata.Count())
                 throw new CollectionByIdsBadRequestException();
 
-            var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEnities);
+            var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEnitiesWithMetadata);
 
-            return companiesToReturn;
+            return (companiesToReturn, metaData: companyEnitiesWithMetadata.MetaData);
         }
 
         public async Task<(IEnumerable<CompanyDto> companies, string ids)> CreateCompanyCollectionAsync(IEnumerable<CompanyForCreationDto> companyCollection)

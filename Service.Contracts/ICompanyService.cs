@@ -1,4 +1,5 @@
 ﻿using Shared.DTO;
+using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,13 @@ namespace Service.Contracts
 {
     public interface ICompanyService
     {
-        Task<IEnumerable<CompanyDto>> GetAllCompaniesAsync(bool trackChanges);
+        Task<(IEnumerable<CompanyDto> companies, MetaData metaData)> GetAllCompaniesAsync(CompanyParameters companyParameters, bool trackChanges);
 
         Task<CompanyDto> GetCompanyAsync(Guid id, bool trackChanges);
 
         Task<CompanyDto> CreateCompanyAsync(CompanyForCreationDto company);
 
-        Task<IEnumerable<CompanyDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
+        Task<(IEnumerable<CompanyDto> companies, MetaData metaData)> GetByIdsAsync(IEnumerable<Guid> ids, CompanyParameters companyParameters, bool trackChanges);
 
         Task<(IEnumerable<CompanyDto> companies, string ids)> CreateCompanyCollectionAsync 
             (IEnumerable<CompanyForCreationDto> companyCollection);

@@ -1,12 +1,15 @@
 ﻿using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Presentation.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service.Contracts;
 using Shared.DTO;
+using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CompanyEmployees.Presentation.Controllers
@@ -23,11 +26,14 @@ namespace CompanyEmployees.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCompanies()
+        public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
         {
-            var companies = await _service.CompanyService.GetAllCompaniesAsync(trackChanges: false);
+            var pagedResult = await _service.CompanyService.GetAllCompaniesAsync(companyParameters, trackChanges: false);
 
-            return Ok(companies);
+            Response.Headers.Add("X-Pagination",
+            JsonSerializer.Serialize(pagedResult.metaData));
+
+            return Ok(pagedResult.companies);
         }
 
         [HttpGet("{id:guid}", Name = "CompanyById")]
@@ -49,11 +55,14 @@ namespace CompanyEmployees.Presentation.Controllers
 
         [HttpGet("collection/({ids})", Name = "CompanyCollection")]
         public async Task<IActionResult> GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]
-                                                        IEnumerable<Guid> ids) 
+                                                        IEnumerable<Guid> ids, [FromQuery] CompanyParameters companyParameters) 
         {
-            var companies = await _service.CompanyService.GetByIdsAsync(ids, false);
+            var pagedResult = await _service.CompanyService.GetByIdsAsync(ids, companyParameters, false);
 
-            return Ok(companies);
+            Response.Headers.Add("X-Pagination",
+            JsonSerializer.Serialize(pagedResult.metaData));
+
+            return Ok(pagedResult.companies);
         
         }
 
