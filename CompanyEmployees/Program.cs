@@ -1,5 +1,6 @@
 using CompanyEmployees.Extensions;
 using CompanyEmployees.Presentation.ActionFilters;
+using CompanyEmployees.Utility;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,13 @@ using Service.DataShaping;
 using Shared.DTO;
 
 NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
-    new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
-    .Services.BuildServiceProvider()
-    .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
-    .OfType<NewtonsoftJsonPatchInputFormatter>().First();
+    new ServiceCollection().AddLogging()
+                           .AddMvc()
+                           .AddNewtonsoftJson().Services
+                           .BuildServiceProvider()
+                           .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
+                           .OfType<NewtonsoftJsonPatchInputFormatter>()
+                           .First();
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +44,10 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
 
+builder.Services.AddScoped<ValidateMediaTypeAttribute>();
+
+builder.Services.AddScoped<IEmployeeLinks, EmployeeLinks>();
+
 builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
 
 builder.Services.AddControllers(config => 
@@ -50,6 +58,8 @@ builder.Services.AddControllers(config =>
     }).AddXmlDataContractSerializerFormatters()
       .AddCustomCsvFormatter()
       .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
+
+builder.Services.AddCustomMediaTypes();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
