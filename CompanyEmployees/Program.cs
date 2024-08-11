@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using CompanyEmployees.Extensions;
 using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Utility;
@@ -67,6 +68,12 @@ builder.Services.ConfigureResponseCaching();
 
 builder.Services.ConfigureHttpCacheHeaders();
 
+builder.Services.AddMemoryCache();
+
+builder.Services.ConfigureRateLimitingOptions();
+
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
@@ -85,7 +92,9 @@ app.UseStaticFiles();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
-});
+}); 
+
+app.UseIpRateLimiting();
 
 app.UseCors("CorsPolicy");
 

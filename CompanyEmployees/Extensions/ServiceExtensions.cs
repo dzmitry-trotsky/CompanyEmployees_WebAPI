@@ -9,6 +9,7 @@ using Service;
 using Service.Contracts;
 using Asp.Versioning;
 using Marvin.Cache.Headers;
+using AspNetCoreRateLimit;
 
 namespace CompanyEmployees.Extensions
 {
@@ -113,6 +114,29 @@ namespace CompanyEmployees.Extensions
                 {
                     validationOpt.MustRevalidate = true;
                 });
+
+        public static void ConfigureRateLimitingOptions(this IServiceCollection services)
+        {
+            var rateLimitRules = new List<RateLimitRule>
+            {
+                new RateLimitRule
+                {
+                    Endpoint = "*",
+                    Limit = 3,
+                    Period = "5m"
+                }
+            };
+            
+            services.Configure<IpRateLimitOptions>(opt => 
+            {
+                opt.GeneralRules = rateLimitRules;
+            });
+
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+        }
 
     }
 }
