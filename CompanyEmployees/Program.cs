@@ -63,6 +63,10 @@ builder.Services.AddCustomMediaTypes();
 
 builder.Services.ConfigureVersioning();
 
+builder.Services.ConfigureResponseCaching();
+
+builder.Services.ConfigureHttpCacheHeaders();
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
@@ -84,6 +88,10 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseCors("CorsPolicy");
+
+app.UseResponseCaching();
+
+app.UseHttpCacheHeaders();
 
 app.UseAuthorization();
 

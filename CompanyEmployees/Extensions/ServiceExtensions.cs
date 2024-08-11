@@ -8,6 +8,7 @@ using Repository;
 using Service;
 using Service.Contracts;
 using Asp.Versioning;
+using Marvin.Cache.Headers;
 
 namespace CompanyEmployees.Extensions
 {
@@ -23,18 +24,18 @@ namespace CompanyEmployees.Extensions
         {
             services.AddCors(options =>
             {
-            options.AddPolicy("CorsPolicy", builder =>
-                builder.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .WithExposedHeaders("X-Pagination")
-                );
+                options.AddPolicy("CorsPolicy", builder =>
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("X-Pagination")
+                    );
             });
         }
 
         public static void ConfigureIISIntegration(this IServiceCollection services)
         {
-            services.Configure<IISOptions>(options => 
+            services.Configure<IISOptions>(options =>
             {
 
             });
@@ -42,7 +43,7 @@ namespace CompanyEmployees.Extensions
 
         public static void ConfigureLoggerService(this IServiceCollection services)
         {
-            services.AddSingleton<ILoggerManager,  LoggerManager>();
+            services.AddSingleton<ILoggerManager, LoggerManager>();
         }
 
         public static void ConfigureRepositoryManager(this IServiceCollection services)
@@ -57,7 +58,7 @@ namespace CompanyEmployees.Extensions
 
         public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder)
         {
-            return builder.AddMvcOptions( config => config.OutputFormatters.Add(new CsvOutputFormatter()));
+            return builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
         }
 
         //registering two new custom media types for the JSON and XML output formatters
@@ -78,7 +79,7 @@ namespace CompanyEmployees.Extensions
 
                 var xmlOutputFormatter = config.OutputFormatters
                     .OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
-                
+
                 if (xmlOutputFormatter != null)
                 {
                     xmlOutputFormatter.SupportedMediaTypes
@@ -98,6 +99,20 @@ namespace CompanyEmployees.Extensions
                 opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
         }
+
+        public static void ConfigureResponseCaching(this IServiceCollection services) => services.AddResponseCaching();
+
+        public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
+            => services.AddHttpCacheHeaders(
+                (expirationOpt) =>
+                {
+                    expirationOpt.MaxAge = 100;
+                    expirationOpt.CacheLocation = CacheLocation.Private;
+                },
+                (validationOpt) =>
+                {
+                    validationOpt.MustRevalidate = true;
+                });
 
     }
 }
