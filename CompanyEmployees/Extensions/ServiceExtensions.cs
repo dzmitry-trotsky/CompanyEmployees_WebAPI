@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Repository;
 using Service;
 using Service.Contracts;
+using Asp.Versioning;
 
 namespace CompanyEmployees.Extensions
 {
@@ -85,6 +86,16 @@ namespace CompanyEmployees.Extensions
                     xmlOutputFormatter.SupportedMediaTypes
                         .Add("application/vnd.apiroot.hateoas+xml");
                 }
+            });
+        }
+        public static void ConfigureVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
         }
 
