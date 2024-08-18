@@ -2,6 +2,7 @@
 using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Presentation.ModelBinders;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service.Contracts;
@@ -19,11 +20,12 @@ namespace CompanyEmployees.Presentation.Controllers
     [ApiVersion("1.0")]
     [Route("api/companies")]
     [ApiController]
-    public class CompanyController: ControllerBase
+    [Authorize(Roles = "Manager")]
+    public class CompaniesController: ControllerBase
     {
         private readonly IServiceManager _service;
 
-        public CompanyController(IServiceManager service)
+        public CompaniesController(IServiceManager service)
         {
             _service = service;
         }
