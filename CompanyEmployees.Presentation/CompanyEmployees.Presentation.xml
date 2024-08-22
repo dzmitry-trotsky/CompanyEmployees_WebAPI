@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CompanyEmployees.Presentation</name>
+    </assembly>
+    <members>
+        <member name="M:CompanyEmployees.Presentation.Controllers.CompaniesController.GetCompanies(Shared.RequestFeatures.CompanyParameters)">
+            <summary>
+            Gets the list of all comanies
+            </summary>
+            <param name="companyParameters"></param>
+            <returns>Companies list</returns>
+            <response code="200">Returns companies list</response>
+            <response code="400">If companies is null</response>
+            <response code="401">If not authorized</response>
+            <response code="422">If the model is invalid</response>
+        </member>
+        <member name="M:CompanyEmployees.Presentation.Controllers.CompaniesController.GetCompany(System.Guid)">
+            <summary>
+             Gets the company by id
+            </summary>
+             <param name="id"></param>
+            <returns>Company</returns>
+            <response code="200">Returns company</response>
+             <response code="400">If company is null</response>
+            <response code="401">If not authorized</response>
+             <response code="422">If the model is invalid</response>
+        </member>
+        <member name="M:CompanyEmployees.Presentation.Controllers.CompaniesController.CreateCompany(Shared.DTO.CompanyForCreationDto)">
+            <summary>
+             Creates the new company
+            </summary>
+             <param name="company"></param>
+            <returns>Just created company</returns>
+            <response code="201">Returns the newly created company</response>
+             <response code="400">If company is null</response>
+            <response code="401">If not authorized</response>
+             <response code="422">If the model is invalid</response>
+        </member>
+        <member name="M:CompanyEmployees.Presentation.Controllers.CompaniesController.GetCompanyCollection(System.Collections.Generic.IEnumerable{System.Guid},Shared.RequestFeatures.CompanyParameters)">
+            <summary>
+             Gets the list of companies by ids
+            </summary>
+             <param name="ids" type="string"></param>
+             <param name="companyParameters"></param>
+            <returns>Companies list</returns>
+            <response code="200">Returns companies</response>
+             <response code="400">If companies is null</response>
+            <response code="401">If not authorized</response>
+             <response code="422">If the model is invalid</response>
+        </member>
+        <member name="M:CompanyEmployees.Presentation.Controllers.CompaniesController.CreateCompanyCollection(System.Collections.Generic.IEnumerable{Shared.DTO.CompanyForCreationDto})">
+            <summary>
+             Creates the new companies
+            </summary>
+             <param name="companyCollection"></param>
+            <returns>Just created companies list</returns>
+            <response code="201">Returns the newly created companies</response>
+             <response code="400">If companies is null</response>
+            <response code="401">If not authorized</response>
+             <response code="422">If the model is invalid</response>
+        </member>
+        <member name="M:CompanyEmployees.Presentation.Controllers.CompaniesController.DeleteCompany(System.Guid)">
+            <summary>
+             Removes company by id
+            </summary>
+             <param name="id"></param>
+            <returns>No content if company removes successfuly</returns>
+            <response code="204">If company successfuly removed</response>
+             <response code="400">If companies is null</response>
+            <response code="401">If not authorized</response>
+             <response code="422">If the model is invalid</response>
+        </member>
+        <member name="M:CompanyEmployees.Presentation.Controllers.CompaniesController.UpdateCompany(System.Guid,Shared.DTO.CompanyForUpdateDto)">
+            <summary>
+             Updates the company by id
+            </summary>
+             <param name="company"></param>
+            <returns>No content if company updates sucessfuly</returns>
+            <response code="204">If company successfuly updated</response>
+             <response code="400">If companies is null</response>
+            <response code="401">If not authorized</response>
+             <response code="422">If the model is invalid</response>
+        </member>
+        <member name="M:CompanyEmployees.Presentation.Controllers.CompaniesController.GetCompaniesOptions">
+            <summary>
+             Info about actions wich can be used with companies
+            </summary>
+            <returns>Header with actions wich can be used with companies</returns>
+            <response code="200">Returns header with actions wich can be used with companies</response>
+            <response code="401">If not authorized</response>
+        </member>
+        <member name="T:CompanyEmployees.Presentation.Controllers.CompaniesV2Controller">
+            <summary>
+            Class for testing versioning
+            </summary>
+        </member>
+    </members>
+</doc>
