@@ -1,8 +1,10 @@
+using Application;
 using AspNetCoreRateLimit;
 using CompanyEmployees.Extensions;
 using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Utility;
 using Contracts;
+using MediatR;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Options;
 using NLog;
 using Service.DataShaping;
 using Shared.DTO;
+using static System.Net.Mime.MediaTypeNames;
 
 NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
     new ServiceCollection().AddLogging()
@@ -85,6 +88,8 @@ builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddJwtConfiguration(builder.Configuration);
 
 builder.Services.ConfigureSwagger();
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(AssemblyReference).Assembly));
 
 var app = builder.Build();
 

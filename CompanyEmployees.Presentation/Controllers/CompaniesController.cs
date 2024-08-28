@@ -1,7 +1,10 @@
-﻿using Asp.Versioning;
+﻿using Application.Command.Company;
+using Application.Queries.Company;
+using Asp.Versioning;
 using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Presentation.ModelBinders;
 using Marvin.Cache.Headers;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -24,13 +27,12 @@ namespace CompanyEmployees.Presentation.Controllers
     [Authorize(Roles = "Administrator")]
     public class CompaniesController: ControllerBase
     {
-        private readonly IServiceManager _service;
+        private readonly ISender _sender;
 
-        public CompaniesController(IServiceManager service)
+        public CompaniesController(ISender sender)
         {
-            _service = service;
+            _sender = sender;
         }
-
 
         ///<summary>
         ///Gets the list of all comanies
@@ -49,7 +51,7 @@ namespace CompanyEmployees.Presentation.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
         {
-            var pagedResult = await _service.CompanyService.GetAllCompaniesAsync(companyParameters, trackChanges: false);
+            var pagedResult = await _sender.Send(new GetCompaniesQuery(companyParameters, TrackChanges: false));
 
             Response.Headers.Add("X-Pagination",
             JsonSerializer.Serialize(pagedResult.metaData));
@@ -76,7 +78,7 @@ namespace CompanyEmployees.Presentation.Controllers
         [HttpCacheValidation(MustRevalidate = false)]
         public async Task<IActionResult> GetCompany(Guid id)
         {
-            var company = await _service.CompanyService.GetCompanyAsync(id, false);
+            var company = await _sender.Send(new GetCompanyQuery(id, TrackChanges: false));
 
             return Ok(company);
         }
@@ -100,7 +102,10 @@ namespace CompanyEmployees.Presentation.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
         {
-            var createdCompany = await _service.CompanyService.CreateCompanyAsync(company);
+            if (company is null)
+                return BadRequest("CompanyForCreationDto object is null");
+
+            var createdCompany = await _sender.Send(new CreateCompanyCommand(company));
 
             return CreatedAtRoute("CompanyById", new {id = createdCompany.Id}, createdCompany);
         }
@@ -123,7 +128,7 @@ namespace CompanyEmployees.Presentation.Controllers
         public async Task<IActionResult> GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]
                                                         IEnumerable<Guid> ids, [FromQuery] CompanyParameters companyParameters) 
         {
-            var pagedResult = await _service.CompanyService.GetByIdsAsync(ids, companyParameters, false);
+            var pagedResult = await _sender.Send(new GetCompanyCollectionQuery(ids, companyParameters, TrackChanges: false));
 
             Response.Headers.Add("X-Pagination",
             JsonSerializer.Serialize(pagedResult.metaData));
@@ -148,7 +153,7 @@ namespace CompanyEmployees.Presentation.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto> companyCollection) 
         {
-            var result = await _service.CompanyService.CreateCompanyCollectionAsync(companyCollection);
+            var result = await _sender.Send(new CreateCompanyCollectionCommand(companyCollection));
 
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
@@ -172,7 +177,7 @@ namespace CompanyEmployees.Presentation.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> DeleteCompany (Guid id)
         {
-            await _service.CompanyService.DeleteCompanyAsync(id, false);
+            await _sender.Send(new DeleteCompanyCommand(id, TrackChanges: false));
 
             return NoContent();
         }
@@ -194,7 +199,7 @@ namespace CompanyEmployees.Presentation.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto company)
         {
-            await _service.CompanyService.UpdateCompanyAsync(id, company, true);
+            await _sender.Send(new UpdateCompanyCommand(id, company, TrackChanges: true));
 
             return NoContent();
         }
