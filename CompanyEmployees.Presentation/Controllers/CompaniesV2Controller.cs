@@ -1,7 +1,10 @@
-﻿using Asp.Versioning;
+﻿using Application.Queries.Company;
+using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.RequestFeatures;
+using System.Text.Json;
 
 namespace CompanyEmployees.Presentation.Controllers
 {
@@ -14,20 +17,21 @@ namespace CompanyEmployees.Presentation.Controllers
     [ApiExplorerSettings(GroupName = "v2")]
     public class CompaniesV2Controller: ControllerBase
     {
-        private readonly IServiceManager _serviceManager;
+        private readonly ISender _sender;
 
-        public CompaniesV2Controller(IServiceManager serviceManager)
+        public CompaniesV2Controller(ISender sender)
         {
-            _serviceManager = serviceManager;
+            _sender = sender;
         }
 
         public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
         {
-            var companiesWithMetaData = await _serviceManager.CompanyService.GetAllCompaniesAsync(companyParameters, false);
-            
-            var companiesV2 = companiesWithMetaData.companies.Select(x => $"{x.Name} V2");
+            var pagedResult = await _sender.Send(new GetCompaniesQuery(companyParameters, TrackChanges: false));
 
-            return Ok(companiesV2);
+            Response.Headers.Add("X-Pagination",
+            JsonSerializer.Serialize(pagedResult.metaData));
+
+            return Ok(pagedResult.companies);
         }
     }
 }
