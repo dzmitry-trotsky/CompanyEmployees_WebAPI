@@ -1,0 +1,26 @@
+version: '3.0'
+services:
+ db:
+  image: mcr.microsoft.com/mssql/server:latest
+  ports:
+   - "1433:1433"
+  environment:
+   - ACCEPT_EULA=Y
+   - SA_PASSWORD=cool_pass123
+  restart: always
+ companyemployees:
+  depends_on:
+   - db
+  image: my_app/companyemployees:runtime
+  build:
+   context: .
+  ports:
+   - "8080:5000"
+   - "8081:5001"
+  environment:
+   - ASPNETCORE_Kestrel__Certificates__Default__Password=awesomepass
+   - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/companyemployees.pfx
+   - SECRET=ItsMySuperSecretKeyForWebAPI_123@SecretKeyDimasta
+  volumes:
+   - ${USERPROFILE}/.aspnet/https:/https/
+

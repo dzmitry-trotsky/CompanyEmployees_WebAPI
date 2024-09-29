@@ -45,7 +45,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanyEmployees.Presentati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{3B129712-8F91-4EC6-998C-9C4C8498581E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{12DCCBD6-4398-4918-9EA3-47D01DF7DF7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{12DCCBD6-4398-4918-9EA3-47D01DF7DF7C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{A3DBFC71-0456-4F84-A674-4657F0190C86}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{BB4746D8-AC25-42A4-8A65-8B37A3CFD81A}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile.txt = Dockerfile.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +100,10 @@ Global
 		{12DCCBD6-4398-4918-9EA3-47D01DF7DF7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12DCCBD6-4398-4918-9EA3-47D01DF7DF7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12DCCBD6-4398-4918-9EA3-47D01DF7DF7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3DBFC71-0456-4F84-A674-4657F0190C86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3DBFC71-0456-4F84-A674-4657F0190C86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3DBFC71-0456-4F84-A674-4657F0190C86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3DBFC71-0456-4F84-A674-4657F0190C86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

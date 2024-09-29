@@ -3,6 +3,7 @@ using AspNetCoreRateLimit;
 using CompanyEmployees.Extensions;
 using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Utility;
+using Repository;
 using Contracts;
 using MediatR;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -131,4 +132,5 @@ app.UseSwaggerUI(s =>
     s.SwaggerEndpoint("/swagger/v2/swagger.json", "Company-Employees API v2");
 });
 
-app.Run();
+app.MigrateDatabase().Run();
+
