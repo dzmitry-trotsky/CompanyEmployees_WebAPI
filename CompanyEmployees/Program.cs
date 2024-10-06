@@ -15,6 +15,7 @@ using Service.DataShaping;
 using Shared.DTO;
 using static System.Net.Mime.MediaTypeNames;
 
+/*for test github actions*/
 NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
     new ServiceCollection().AddLogging()
                            .AddMvc()
